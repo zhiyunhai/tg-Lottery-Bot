@@ -1,0 +1,5 @@
+api_token: "YOUR-TG-BOT-API-TOKEN"
+admin_user_id: 123456789
+group_user_name: "@example"
+prize_txt_file_path: "example.txt"
+timezone: "Asia/Shanghai"
