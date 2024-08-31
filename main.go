@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	_ "time/tzdata"
 )
 
 func main() {
