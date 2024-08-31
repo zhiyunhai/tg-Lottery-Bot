@@ -105,7 +105,5 @@ jobs:
             tgLotteryBot_linux_*
             tgLotteryBot_macos_*
             tgLotteryBot_windows_*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
