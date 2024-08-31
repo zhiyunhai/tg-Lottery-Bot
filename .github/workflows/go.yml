@@ -88,22 +88,17 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     needs: [build-linux, build-macos, build-windows]
+    if: startsWith(github.ref, 'refs/tags/v')
     steps:
-      - name: Download Artifacts
+      - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
-          merge: true
-          name: "*"
+          name: tgLotteryBot-${{ matrix.os }}-${{ matrix.arch }}
+          path: ./
 
-      - name: Create Release
+      - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            tgLotteryBot_linux_*
-            tgLotteryBot_macos_*
-            tgLotteryBot_windows_*
-
+          files: "tgLotteryBot-*"
 
