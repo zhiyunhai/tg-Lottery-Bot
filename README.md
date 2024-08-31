@@ -2,10 +2,6 @@
 
 ---
 
-
-
-## Telegram 自动化抽奖机器人
-
 ## 广告
 
 美国T-Mobile USA原生顶级蜂窝网络ip专线节点，新用户首次购买仅25RMB(CNY) 1GB
@@ -82,7 +78,8 @@ After=network.target
 
 [Service]
 Type=simple
-User=your_user_here
+User=your_user_name
+WorkingDirectory=/your/binary/path/here/
 ExecStart=/your/binary/path/here/tgLotteryBot
 Restart=on-failure
 RestartSec=10s
@@ -92,6 +89,7 @@ StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
+
 ```
 
 将此文件保存为 `/etc/systemd/system/tgLotteryBot.service`，然后运行以下命令启动和启用服务：
