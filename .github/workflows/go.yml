@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*.*.*' # 仅当推送带有版本标签（如 v1.0.0）时触发
+      - 'v*.*.*'
   workflow_dispatch:
 
 jobs:
@@ -12,8 +12,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        go-version: [1.20]
-        platform: [amd64, 386]
+        go-version: [1.22]
+        platform: [amd64]
 
     steps:
     - uses: actions/checkout@v4
