@@ -1,10 +1,9 @@
-name: Build Go Project
+name: Build and Release Go Project
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 jobs:
@@ -13,7 +12,7 @@ jobs:
     strategy:
       matrix:
         go-version: ['1.22']
-        platform: [amd64, 386, arm64, arm]
+        platform: [amd64, 386, arm64, arm, riscv64]
     steps:
     - uses: actions/checkout@v4
 
@@ -23,23 +22,23 @@ jobs:
         go-version: ${{ matrix.go-version }}
 
     - name: Install dependencies
-      run: go mod tidy
+      run: sudo apt-get update && sudo apt-get install -y build-essential gcc
 
     - name: Build for Linux ${{ matrix.platform }}
       run: |
-        GOOS=linux GOARCH=${{ matrix.platform }} go build -o build/tglotterybot_linux_${{ matrix.platform }} .
+        go build -o build/tgLotteryBot_linux_${{ matrix.platform }} .
 
     - name: Upload Linux Binaries
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: linux-binaries-${{ matrix.platform }}
-        path: build/
+        name: tgLotteryBot_linux_${{ matrix.platform }}
+        path: build/tgLotteryBot_linux_${{ matrix.platform }}
 
   build-macos:
     runs-on: macos-latest
     strategy:
       matrix:
-        go-version: ['1.20']
+        go-version: ['1.22']
         platform: [amd64, arm64]
     steps:
     - uses: actions/checkout@v4
@@ -50,23 +49,23 @@ jobs:
         go-version: ${{ matrix.go-version }}
 
     - name: Install dependencies
-      run: go mod tidy
+      run: xcode-select --install || true
 
     - name: Build for macOS ${{ matrix.platform }}
       run: |
-        GOOS=darwin GOARCH=${{ matrix.platform }} go build -o build/tglotterybot_macos_${{ matrix.platform }} .
+        go build -o build/tgLotteryBot_macos_${{ matrix.platform }} .
 
     - name: Upload macOS Binaries
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: macos-binaries-${{ matrix.platform }}
-        path: build/
+        name: tgLotteryBot_macos_${{ matrix.platform }}
+        path: build/tgLotteryBot_macos_${{ matrix.platform }}
 
   build-windows:
     runs-on: windows-latest
     strategy:
       matrix:
-        go-version: ['1.20']
+        go-version: ['1.22']
         platform: [amd64, 386]
     steps:
     - uses: actions/checkout@v4
@@ -76,16 +75,37 @@ jobs:
       with:
         go-version: ${{ matrix.go-version }}
 
-    - name: Install dependencies
-      run: go mod tidy
-
     - name: Build for Windows ${{ matrix.platform }}
       run: |
-        GOOS=windows GOARCH=${{ matrix.platform }} go build -o build/tglotterybot_windows_${{ matrix.platform }}.exe .
+        go build -o build/tgLotteryBot_windows_${{ matrix.platform }}.exe .
 
     - name: Upload Windows Binaries
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: windows-binaries-${{ matrix.platform }}
-        path: build/
+        name: tgLotteryBot_windows_${{ matrix.platform }}
+        path: build/tgLotteryBot_windows_${{ matrix.platform }}.exe
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: [build-linux, build-macos, build-windows]
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge: true
+          name: "*"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            tgLotteryBot_linux_*
+            tgLotteryBot_macos_*
+            tgLotteryBot_windows_*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
