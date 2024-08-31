@@ -1,11 +1,6 @@
 # Telegram 自动化抽奖机器人 | Telegram Lottery Bot
 
 ---
-
-
-
-## Telegram 自动化抽奖机器人
-
 ## 广告
 
 美国T-Mobile USA原生顶级蜂窝网络ip专线节点，新用户首次购买仅25RMB(CNY) 1GB
