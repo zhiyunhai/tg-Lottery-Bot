@@ -30,6 +30,9 @@ func (b *Bot) prizeDraw(eventID string) error {
 	if eventInfo.CancelStatus == true {
 		return fmt.Errorf("取消的活动ID: %v 取消开奖", eventInfo.ID)
 	}
+	if eventInfo.OpenStatus == true {
+		return fmt.Errorf("已经开奖的活动ID %v，跳过", eventInfo.ID)
+	}
 
 	// 读取活动参与者数组
 	partnerList, err := getParticipantsByEventID(db, eventID)
