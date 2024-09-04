@@ -141,6 +141,13 @@ func (b *Bot) handleCallbackQuery(callbackQuery *tgbotapi.CallbackQuery) {
 		b.sendPageCmdList(callbackQuery.Message.Chat.ID, callbackQuery.Message.MessageID, page)
 
 	case data == "confirm_create_event":
+		if len(b.EventInfoMap) == 0 {
+			err := b.sendReply(callbackQuery.Message, "无效，请重新创建")
+			if err != nil {
+				log.Printf("sendReply failed: %v", err)
+			}
+			return
+		}
 		// 初始化数据库
 		db, err := initDB()
 		if err != nil {
