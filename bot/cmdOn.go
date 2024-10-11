@@ -99,7 +99,31 @@ func (b *Bot) sendPageCmdOn(chatID int64, messageID int, page int) {
 		log.Printf("createAllEventInfoMsg err: %v", err)
 		return
 	}
-	outputMsg += "正在进行的活动"
+
+	// 初始化数据库
+	db, err := initDB()
+	if err != nil {
+		log.Printf("initDB failed: %v", err)
+		return
+	}
+	defer func() {
+		if err := db.Close(); err != nil {
+			log.Printf("close db err: %v", err)
+		}
+	}()
+
+	partnerList, err := getParticipantsByEventID(db, info.ID)
+	if err != nil {
+		log.Printf("getParticipantsByEventID err: %v", err)
+		return
+	}
+
+	partnerString := "<b>当前参与者信息:</b>\n"
+	for _, partner := range partnerList {
+		partnerString += fmt.Sprintf("<b>用户ID: </b>%v | <b>用户名: </b>%v\n", partner.UserID, partner.UserName)
+	}
+
+	outputMsg += partnerString + "<b>正在进行的活动</b>\n"
 
 	// 创建内联键盘
 	keyboard := b.generateCmdOnKeyboard(page, totalPages)
