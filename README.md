@@ -1,4 +1,4 @@
-# Telegram 自动化抽奖机器人 | Telegram Lottery Bot
+# Telegram 抽奖机器人 | Telegram Lottery Bot
 
 ---
 
