@@ -156,7 +156,7 @@ sudo systemctl status tgLotteryBot # 检查服务状态
 喜欢这个项目吗？请考虑支持开发者，通过以下方式捐赠：
 
 - 支付宝、微信：访问 [支持我们](https://www.zyh8.com/%e6%94%af%e6%8c%81%e6%88%91%e4%bb%ac/)
-- USDT (TRC20): `TJsH3fGwtmr1nSbyBfFN6uXvBArpQjebJ6`
+- USDT (TRC20): `TVBA2iRuERjyPVCgjEpE8vAhLBaF77DTZ4`
 
 ### 联系方式
 
